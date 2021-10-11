@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql:pharmagator
+    url: jdbc:postgresql:pharmatutor
     username: postgres
     password: postgres
   jpa:
