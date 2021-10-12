@@ -1,14 +1,13 @@
 package com.eleks.academy.pharmagator.controllers;
 
 import com.eleks.academy.pharmagator.entities.Pharmacy;
+import com.eleks.academy.pharmagator.exceptions.InvalidIdentifierException;
 import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 
 @Controller
@@ -25,7 +24,7 @@ public class PharmacyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Pharmacy> getById(@PathVariable("id") Long id) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ""));
+        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         return ResponseEntity.ok(pharmacy);
     }
 
@@ -42,7 +41,7 @@ public class PharmacyController {
 
     @GetMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid pharmacy id:" + id));
+        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         pharmacyRepository.delete(pharmacy);
 
         return ResponseEntity.ok("Pharmacy was successfully deleted!");
