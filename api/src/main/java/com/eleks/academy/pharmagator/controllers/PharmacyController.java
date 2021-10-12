@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class PharmacyController {
 
     @GetMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid pharmacy id:" + id));
+        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid pharmacy id:" + id));
         pharmacyRepository.delete(pharmacy);
 
         return ResponseEntity.ok("Pharmacy was successfully deleted!");
