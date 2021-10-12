@@ -29,18 +29,18 @@ public class MedicineController {
     }
 
     @PostMapping
-    public ResponseEntity<Medicine> createPharmacy(@RequestBody Medicine medicine) {
+    public ResponseEntity<Medicine> createMedicine(@RequestBody Medicine medicine) {
         return new ResponseEntity<>(medicineRepository.save(medicine), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Medicine> updatePharmacy(@PathVariable("id") Long id, @RequestBody Medicine medicine) {
+    public ResponseEntity<Medicine> updateMedicine(@PathVariable("id") Long id, @RequestBody Medicine medicine) {
         medicine.setId(id);
         return ResponseEntity.ok(medicineRepository.save(medicine));
     }
 
     @GetMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteMedicine(@PathVariable("id") Long id) {
         Medicine medicine = medicineRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         medicineRepository.delete(medicine);
 
