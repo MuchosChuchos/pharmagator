@@ -20,13 +20,12 @@ public class PharmacyController {
 
     @GetMapping
     public ResponseEntity<List<Pharmacy>> getAll() {
-        List<Pharmacy> pharmacyList = pharmacyRepository.findAll();
-        return ResponseEntity.ok(pharmacyList);
+        return ResponseEntity.ok(pharmacyRepository.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Pharmacy> getById(@PathVariable("id") Long id) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id).get();
+        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ""));
         return ResponseEntity.ok(pharmacy);
     }
 
