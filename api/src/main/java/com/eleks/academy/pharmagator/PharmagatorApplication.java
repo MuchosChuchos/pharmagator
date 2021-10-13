@@ -10,11 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class PharmagatorApplication {
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(PharmagatorApplication.class, args);
 	}
