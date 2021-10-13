@@ -38,7 +38,7 @@ public class PriceController {
         return new ResponseEntity<>(priceRepository.save(price), HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{pharmacy_id}/{medicine_id}")
+    @PutMapping("/{pharmacy_id}/{medicine_id}")
     public ResponseEntity<Price> updatePrice(
             @PathVariable("medicine_id") Long medicineId,
             @PathVariable("pharmacy_id") Long pharmacyId,
@@ -48,7 +48,7 @@ public class PriceController {
         return ResponseEntity.ok(priceRepository.save(price));
     }
 
-    @GetMapping("/delete/{pharmacy_id}/{medicine_id}")
+    @DeleteMapping("/{pharmacy_id}/{medicine_id}")
     public ResponseEntity<?> deletePrice(@PathVariable("medicine_id") Long pharmacyId,
                                         @PathVariable("pharmacy_id") Long medicineId) {
         PriceId id = new PriceId(medicineId, pharmacyId);

@@ -33,13 +33,13 @@ public class PharmacyController {
         return new ResponseEntity<>(pharmacyRepository.save(pharmacy), HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Pharmacy> updatePharmacy(@PathVariable("id") Long id, @RequestBody Pharmacy pharmacy) {
         pharmacy.setId(id);
         return ResponseEntity.ok(pharmacyRepository.save(pharmacy));
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         pharmacyRepository.delete(pharmacy);
