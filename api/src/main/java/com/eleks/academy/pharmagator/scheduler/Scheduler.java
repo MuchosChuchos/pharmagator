@@ -16,20 +16,22 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class Scheduler {
 
-    private final DataProvider dataProvider;
+    private final List<DataProvider> dataProviderList;
     private final PriceRepository priceRepository;
     private final PharmacyRepository pharmacyRepository;
     private final MedicineRepository medicineRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     private long uniqueId = 0;
-    private final Pharmacy pharmacy;
+    private Pharmacy pharmacy;
 
     {
         pharmacy = new Pharmacy();
@@ -38,18 +40,10 @@ public class Scheduler {
         pharmacy.setMedicineLinkTemplate("https://localhost:8080");
     }
 
-    public Scheduler(DataProvider dataProvider, PriceRepository priceRepository, PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository, ModelMapper modelMapper) {
-        this.dataProvider = dataProvider;
-        this.priceRepository = priceRepository;
-        this.pharmacyRepository = pharmacyRepository;
-        this.medicineRepository = medicineRepository;
-        this.modelMapper = modelMapper;
-    }
-
     @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
-        dataProvider.loadData().forEach(this::storeToDatabase);
+        dataProviderList.stream().flatMap(DataProvider::loadData).forEach(this::storeToDatabase);
     }
 
     private void storeToDatabase(MedicineDto dto) {
@@ -66,6 +60,7 @@ public class Scheduler {
         price.setMedicineId(uniqueId);
         price.setPharmacyId(pharmacy.getId());
         price.setUpdatedAt(Instant.now());
+        price.setExternalId(dto.getExternalId());
         priceRepository.save(price);
     }
 
