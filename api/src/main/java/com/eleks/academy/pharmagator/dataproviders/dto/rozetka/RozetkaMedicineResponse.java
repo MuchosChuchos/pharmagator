@@ -8,12 +8,12 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryDto {
 
-    List<String> ids;
-    int showNext;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class RozetkaMedicineResponse {
+
+    List<RozetkaMedicineDto> data;
 }

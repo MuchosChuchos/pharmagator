@@ -40,10 +40,12 @@ public class Scheduler {
         pharmacy.setMedicineLinkTemplate("https://localhost:8080");
     }
 
-    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedDelay = 100, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
-        dataProviderList.stream().flatMap(DataProvider::loadData).forEach(this::storeToDatabase);
+        DataProvider provider = dataProviderList.get(2);
+        provider.loadData().forEach(this::storeToDatabase);
+        //dataProviderList.stream().flatMap(DataProvider::loadData).forEach(this::storeToDatabase);
     }
 
     private void storeToDatabase(MedicineDto dto) {

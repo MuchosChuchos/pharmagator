@@ -6,16 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RozetkaMedicineDto {
+public class RozetkaMedicineResponseData {
 
-    Long id;
-    String title;
-    BigDecimal price;
-
+    List<RozetkaMedicineDto> medicineDtos;
 }
