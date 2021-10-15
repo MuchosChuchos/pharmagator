@@ -1,7 +1,9 @@
 package com.eleks.academy.pharmagator.entities;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,12 +17,13 @@ import java.time.Instant;
 @Setter
 @Table(name = "prices")
 @IdClass(PriceId.class)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Price {
     @Id
-    private long pharmacyId;
+    long pharmacyId;
     @Id
-    private long medicineId;
-    private BigDecimal price;
-    private String externalId;
-    private Instant updatedAt;
+    long medicineId;
+    BigDecimal price;
+    String externalId;
+    Instant updatedAt;
 }

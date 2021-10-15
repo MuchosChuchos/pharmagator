@@ -13,3 +13,9 @@ pharmagator:
       url: https://api-int.apteka-ds.com.ua/api/v1
       category-fetch-url: /category-menu
       category-path: /cat-prods-by-page
+    apteka-rozetka:
+      url: https://xl-catalog-api.rozetka.com.ua/v4/goods
+      ids-fetch-url: /get
+      goods-fetch-url: /getDetails
+      category-id: !!str 4628621
+      sell-status: available

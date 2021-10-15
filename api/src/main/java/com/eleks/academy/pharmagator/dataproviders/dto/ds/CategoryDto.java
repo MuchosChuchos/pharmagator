@@ -1,19 +1,22 @@
 package com.eleks.academy.pharmagator.dataproviders.dto.ds;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryDto {
 
-    private String name;
-    private String slug;
-    private List<CategoryDto> children;
+    String name;
+    String slug;
+    List<CategoryDto> children;
 
     public CategoryDto setName(String name) {
         this.name = name;
