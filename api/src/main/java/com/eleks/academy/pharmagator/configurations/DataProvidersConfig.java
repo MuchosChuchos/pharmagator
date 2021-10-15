@@ -16,7 +16,7 @@ public class DataProvidersConfig {
     @Value("${pharmagator.data-providers.apteka-rozetka.url}")
     private String pharmacyRozetkaBaseUrl;
 
-    @Bean(name = "pharmacyDSWebClient")
+    @Bean
     public WebClient pharmacyDSWebClient() {
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -25,7 +25,7 @@ public class DataProvidersConfig {
                 .build();
     }
 
-    @Bean(name = "pharmacyRozetkaWebClient")
+    @Bean
     public WebClient pharmacyRozetkaWebClient() {
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
