@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
 public class PharmacyRozetkaDataProvider implements DataProvider {
 
     @Qualifier("pharmacyRozetkaWebClient")
-    private final WebClient dsClient;
+    private final WebClient rozetkaClient;
 
     @Value("${pharmagator.data-providers.apteka-rozetka.ids-fetch-url}")
     private String idsFetchUrl;
@@ -55,8 +56,8 @@ public class PharmacyRozetkaDataProvider implements DataProvider {
     }
 
     private Stream<MedicineDto> fetchMedicines(List<Long> ids) {
-        String productIds = convertToString(ids);
-        RozetkaMedicineResponse response = this.dsClient.get().uri(uriBuilder -> uriBuilder
+        String productIds = StringUtils.collectionToDelimitedString(ids, ",");
+        RozetkaMedicineResponse response = this.rozetkaClient.get().uri(uriBuilder -> uriBuilder
                         .path(goodsPath)
                         .queryParam("product_ids", productIds)
                         .build())
@@ -85,7 +86,7 @@ public class PharmacyRozetkaDataProvider implements DataProvider {
 
 
     private RozetkaIdsResponseData fetchIds(int page) {
-        RozetkaIdsResponse idsResponse = this.dsClient.get().uri(uriBuilder -> uriBuilder
+        RozetkaIdsResponse idsResponse = this.rozetkaClient.get().uri(uriBuilder -> uriBuilder
                         .path(idsFetchUrl)
                         .queryParam("category_id", categoryId)
                         .queryParam("sell_status", sellStatus)
