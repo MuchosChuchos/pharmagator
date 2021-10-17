@@ -40,10 +40,10 @@ public class MedicineController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMedicine(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpStatus> deleteMedicine(@PathVariable("id") Long id) {
         Medicine medicine = medicineRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         medicineRepository.delete(medicine);
 
-        return ResponseEntity.ok("Medicine was successfully deleted!");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

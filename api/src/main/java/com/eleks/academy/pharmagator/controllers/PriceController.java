@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.swing.text.html.HTML;
 import java.util.List;
 
 @Controller
@@ -25,7 +27,7 @@ public class PriceController {
         return ResponseEntity.ok(priceRepository.findAll());
     }
 
-    @GetMapping("/{pharmacy_id}/{medicine_id}")
+    @GetMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
     public ResponseEntity<Price> getById(@PathVariable("medicine_id") Long pharmacyId,
                                          @PathVariable("pharmacy_id") Long medicineId) {
         PriceId id = new PriceId(medicineId, pharmacyId);
@@ -38,7 +40,7 @@ public class PriceController {
         return new ResponseEntity<>(priceRepository.save(price), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{pharmacy_id}/{medicine_id}")
+    @PutMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
     public ResponseEntity<Price> updatePrice(
             @PathVariable("medicine_id") Long medicineId,
             @PathVariable("pharmacy_id") Long pharmacyId,
@@ -48,13 +50,13 @@ public class PriceController {
         return ResponseEntity.ok(priceRepository.save(price));
     }
 
-    @DeleteMapping("/{pharmacy_id}/{medicine_id}")
-    public ResponseEntity<?> deletePrice(@PathVariable("medicine_id") Long pharmacyId,
-                                        @PathVariable("pharmacy_id") Long medicineId) {
+    @DeleteMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
+    public ResponseEntity<HttpStatus> deletePrice(@PathVariable("medicine_id") Long pharmacyId,
+                                            @PathVariable("pharmacy_id") Long medicineId) {
         PriceId id = new PriceId(medicineId, pharmacyId);
         Price price = priceRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         priceRepository.delete(price);
 
-        return ResponseEntity.ok("Price was successfully deleted!");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -40,10 +40,10 @@ public class PharmacyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         pharmacyRepository.delete(pharmacy);
 
-        return ResponseEntity.ok("Pharmacy was successfully deleted!");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
