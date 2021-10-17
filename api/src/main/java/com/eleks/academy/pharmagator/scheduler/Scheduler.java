@@ -30,12 +30,11 @@ public class Scheduler {
     private final PharmacyRepository pharmacyRepository;
     private final MedicineRepository medicineRepository;
     private final ModelMapper modelMapper;
-    private long uniqueId = 0;
     private Pharmacy pharmacy;
 
     {
         pharmacy = new Pharmacy();
-        pharmacy.setId(999);
+        pharmacy.setId(999L);
         pharmacy.setName("TOlya's med hub");
         pharmacy.setMedicineLinkTemplate("https://localhost:8080");
     }
@@ -54,21 +53,15 @@ public class Scheduler {
 
         pharmacyRepository.save(pharmacy);
 
-        findUniqueIdInMedicines();
 
-        medicine.setId(uniqueId);
+        medicine.setId(null);
         medicineRepository.save(medicine);
 
-        price.setMedicineId(uniqueId);
+        price.setMedicineId(null);
         price.setPharmacyId(pharmacy.getId());
         price.setUpdatedAt(Instant.now());
         price.setExternalId(dto.getExternalId());
         priceRepository.save(price);
     }
 
-    private void findUniqueIdInMedicines() {
-        while (medicineRepository.existsById(uniqueId)) {
-            ++uniqueId;
-        }
-    }
 }

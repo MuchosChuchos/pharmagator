@@ -3,6 +3,8 @@ package com.eleks.academy.pharmagator.entities;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.io.Serializable;
 
 @Getter
@@ -10,8 +12,10 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PriceId implements Serializable {
-    long pharmacyId;
-    long medicineId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long pharmacyId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long medicineId;
 
     public PriceId() {
 

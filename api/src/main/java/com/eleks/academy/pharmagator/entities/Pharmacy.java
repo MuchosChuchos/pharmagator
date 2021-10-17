@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -16,7 +14,8 @@ import javax.persistence.Table;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Pharmacy {
     @Id
-    long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     String name;
     String medicineLinkTemplate;
 }

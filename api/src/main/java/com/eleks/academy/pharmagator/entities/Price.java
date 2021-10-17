@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -20,9 +17,11 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Price {
     @Id
-    long pharmacyId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long pharmacyId;
     @Id
-    long medicineId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long medicineId;
     BigDecimal price;
     String externalId;
     Instant updatedAt;
