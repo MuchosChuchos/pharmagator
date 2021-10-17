@@ -23,8 +23,18 @@ public class PriceController {
     private final PriceRepository priceRepository;
 
     @GetMapping
-    public ResponseEntity<List<Price>> getAll() {
-        return ResponseEntity.ok(priceRepository.findAll());
+    public ResponseEntity<List<Price>> getAll(@RequestParam(required = false) Long medicineId,
+                                              @RequestParam(required = false) Long pharmacyId) {
+        if (medicineId == null && pharmacyId == null) {
+            return ResponseEntity.ok(priceRepository.findAll());
+        }
+
+        if (medicineId != null) {
+            if (pharmacyId != null)
+                return ResponseEntity.ok(priceRepository.findAllByMedicineIdAndPharmacyId(medicineId, pharmacyId));
+            return ResponseEntity.ok(priceRepository.findAllByMedicineId(medicineId));
+        }
+        return ResponseEntity.ok(priceRepository.findAllByPharmacyId(pharmacyId));
     }
 
     @GetMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
