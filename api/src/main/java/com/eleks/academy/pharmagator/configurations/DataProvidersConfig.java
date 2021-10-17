@@ -18,19 +18,19 @@ public class DataProvidersConfig {
 
     @Bean
     public WebClient pharmacyDSWebClient() {
-        return WebClient.builder()
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .baseUrl(pharmacyDSBaseUrl)
-                .build();
+        return getWebClientWithDefaultHeadersSetup(pharmacyDSBaseUrl);
     }
 
     @Bean
     public WebClient pharmacyRozetkaWebClient() {
+        return getWebClientWithDefaultHeadersSetup(pharmacyRozetkaBaseUrl);
+    }
+
+    private WebClient getWebClientWithDefaultHeadersSetup(String baseUrl) {
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .baseUrl(pharmacyRozetkaBaseUrl)
+                .baseUrl(baseUrl)
                 .build();
     }
 }
