@@ -28,3 +28,6 @@ pharmagator:
       sell-status: available
       category-id: !!str 4628621
       medicament-category-id: !!str 4628712
+    apteka-alteia:
+      url: https://apteka.alteia.ua/shop
+      products-fetch-url: /page

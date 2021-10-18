@@ -22,6 +22,17 @@ public class DataProvidersConfig {
     @Value("${pharmagator.data-providers.apteka-rozetka.url}")
     private String pharmacyRozetkaBaseUrl;
 
+    @Value("${pharmagator.data-providers.apteka-alteia.url}")
+    private String pharmacyAlteiaBaseUrl;
+
+    @Bean
+    public WebClient pharmacyAlteiaWebClient() {
+        return WebClient.builder()
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML_VALUE)
+                .baseUrl(pharmacyAlteiaBaseUrl)
+                .build();
+    }
 
     @Bean(name = "pharmacyDSWebClient")
     public WebClient pharmacyDSWebClient() {
