@@ -54,7 +54,11 @@ pharmagator:
       medicament-category-id: !!str 4628712
       pharmacy-name: pharmacy-rozetka
       page-limit: 5
-    apteka-socialna:
+    pharmacy-socialna:
       url: https://1sa.com.ua/medikamenty
-      pharmacy-name: apteka-911-socialna
+      pharmacy-name: pharmacy-911-socialna
       page-limit: 5
+    pharmacy-alteia:
+      url: https://apteka.alteia.ua/shop
+      products-fetch-url: /page
+      pharmacy-name: pharmacy-alteia
