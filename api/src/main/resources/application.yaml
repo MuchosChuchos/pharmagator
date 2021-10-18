@@ -19,3 +19,6 @@ pharmagator:
       goods-fetch-url: /getDetails
       category-id: !!str 4628621
       sell-status: available
+    apteka-alteia:
+      url: https://apteka.alteia.ua/shop
+      products-fetch-url: /page

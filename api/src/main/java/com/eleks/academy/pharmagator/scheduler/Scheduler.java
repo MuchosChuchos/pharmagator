@@ -42,8 +42,9 @@ public class Scheduler {
     @Scheduled(fixedDelay = 100, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
-        DataProvider provider = dataProviderList.get(2);
+        DataProvider provider = dataProviderList.get(1);
         provider.loadData().forEach(this::storeToDatabase);
+        System.out.println("fetching alteia have been finished");
         //dataProviderList.stream().flatMap(DataProvider::loadData).forEach(this::storeToDatabase);
     }
 
@@ -57,7 +58,7 @@ public class Scheduler {
         medicine.setId(null);
         medicineRepository.save(medicine);
 
-        price.setMedicineId(null);
+        price.setMedicineId(medicine.getId());
         price.setPharmacyId(pharmacy.getId());
         price.setUpdatedAt(Instant.now());
         price.setExternalId(dto.getExternalId());

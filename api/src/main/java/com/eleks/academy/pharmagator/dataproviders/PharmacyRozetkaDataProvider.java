@@ -73,17 +73,6 @@ public class PharmacyRozetkaDataProvider implements DataProvider {
         return Stream.empty();
     }
 
-    private String convertToString(List<Long> ids) {
-        StringBuilder productIds = new StringBuilder();
-        for (int i = 0; i < ids.size(); i++) {
-            if (i == ids.size() - 1) {
-                break;
-            }
-            productIds.append(ids.get(i)).append(",");
-        }
-        return productIds.toString();
-    }
-
 
     private RozetkaIdsResponseData fetchIds(int page) {
         RozetkaIdsResponse idsResponse = this.rozetkaClient.get().uri(uriBuilder -> uriBuilder
