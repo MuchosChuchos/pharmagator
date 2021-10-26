@@ -6,6 +6,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  profiles:
+    active: dummyProviderImpl
 
 pharmagator:
   data-providers:
