@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -40,13 +41,14 @@ public class PharmacyAlteiaDataProvider implements DataProvider {
         Document page = Jsoup.parse(html);
 
         Stream<MedicineDto> medicineDtoStream = this.getMedicineStreamFromPage(page);
-        Elements pageNumbers = page.select("ul[class=page-numbers]").select("a[class=page-numbers]");
 
-        int lastPage = Integer.parseInt(pageNumbers.last().text());
+        int lastPage;
         int currentPage = 2;
 
         do {
             Document newPage = Jsoup.parse(this.fetchHtmlByPage(currentPage));
+            Elements pageNumbers = newPage.select("ul[class=page-numbers]").select("a[class=page-numbers]");
+            lastPage = Integer.parseInt(pageNumbers.last().text());
 
             medicineDtoStream = Stream.concat(medicineDtoStream, this.getMedicineStreamFromPage(newPage));
             currentPage++;
@@ -70,12 +72,16 @@ public class PharmacyAlteiaDataProvider implements DataProvider {
                 medsName.remove(i);
                 medsId.remove(i);
             }
-            medicineDtos.add(MedicineDto.builder()
-                    .externalId(this.getTextBetween(medsId.get(i).attr("href"), "product/", "/"))
-                    .price(new BigDecimal(this.getTextBetween(medsPrice.get(i).text(), "", "\u20B4").replaceAll(",", "")))
-                    .title(medsName.get(i).text())
-                    .pharmacy("Alteia")
-                    .build());
+            try {
+                medicineDtos.add(MedicineDto.builder()
+                        .externalId(this.getTextBetween(medsId.get(i).attr("href"), "product/", "/"))
+                        .price(new BigDecimal(this.getTextBetween(medsPrice.get(i).text(), "", "\u20B4").replaceAll(",", "")))
+                        .title(medsName.get(i).text())
+                        .pharmacy("Alteia")
+                        .build());
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                log.info("Exception ({}) was on page: {}", ex.getMessage(), page.text());
+            }
         }
         return medicineDtos;
     }
