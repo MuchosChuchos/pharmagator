@@ -98,6 +98,7 @@ public class PharmacyDSDataProvider implements DataProvider {
                 .externalId(dsMedicineDto.getId())
                 .price(dsMedicineDto.getPrice())
                 .title(dsMedicineDto.getName())
+                .pharmacy("DS")
                 .build();
     }
 

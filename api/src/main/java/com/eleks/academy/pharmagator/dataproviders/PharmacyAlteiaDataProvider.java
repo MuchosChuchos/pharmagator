@@ -1,7 +1,6 @@
 package com.eleks.academy.pharmagator.dataproviders;
 
 import com.eleks.academy.pharmagator.dataproviders.dto.MedicineDto;
-import com.eleks.academy.pharmagator.dataproviders.dto.rozetka.RozetkaMedicineDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -75,6 +74,7 @@ public class PharmacyAlteiaDataProvider implements DataProvider {
                     .externalId(this.getTextBetween(medsId.get(i).attr("href"), "product/", "/"))
                     .price(new BigDecimal(this.getTextBetween(medsPrice.get(i).text(), "", "\u20B4").replaceAll(",", "")))
                     .title(medsName.get(i).text())
+                    .pharmacy("Alteia")
                     .build());
         }
         return medicineDtos;
@@ -102,11 +102,4 @@ public class PharmacyAlteiaDataProvider implements DataProvider {
                 .block();
     }
 
-    private MedicineDto mapToMedicineDto(RozetkaMedicineDto rozetkaMedicineDto) {
-        return MedicineDto.builder()
-                .externalId(rozetkaMedicineDto.getId().toString())
-                .price(rozetkaMedicineDto.getPrice())
-                .title(rozetkaMedicineDto.getTitle())
-                .build();
-    }
 }

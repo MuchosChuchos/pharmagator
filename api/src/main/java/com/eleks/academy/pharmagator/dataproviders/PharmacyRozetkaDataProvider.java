@@ -93,6 +93,7 @@ public class PharmacyRozetkaDataProvider implements DataProvider {
                 .externalId(rozetkaMedicineDto.getId().toString())
                 .price(rozetkaMedicineDto.getPrice())
                 .title(rozetkaMedicineDto.getTitle())
+                .pharmacy("Rozetka")
                 .build();
     }
 }

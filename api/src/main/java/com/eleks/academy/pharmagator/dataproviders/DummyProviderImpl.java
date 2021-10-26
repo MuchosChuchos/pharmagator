@@ -20,6 +20,7 @@ public class DummyProviderImpl implements DataProvider {
                 .externalId(String.valueOf(i))
                 .title("title" + i)
                 .price(BigDecimal.valueOf(Math.random()))
+                .pharmacy("Dummy")
                 .build();
     }
 }

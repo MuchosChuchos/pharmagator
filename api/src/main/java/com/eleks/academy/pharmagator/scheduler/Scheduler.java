@@ -8,17 +8,16 @@ import com.eleks.academy.pharmagator.entities.Price;
 import com.eleks.academy.pharmagator.repositories.MedicineRepository;
 import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import com.eleks.academy.pharmagator.repositories.PriceRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Component
@@ -30,32 +29,35 @@ public class Scheduler {
     private final PharmacyRepository pharmacyRepository;
     private final MedicineRepository medicineRepository;
     private final ModelMapper modelMapper;
-    private Pharmacy pharmacy;
-
-    {
-        pharmacy = new Pharmacy();
-        pharmacy.setId(999L);
-        pharmacy.setName("TOlya's med hub");
-        pharmacy.setMedicineLinkTemplate("https://localhost:8080");
-    }
 
     @Scheduled(fixedDelay = 100, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
-        DataProvider provider = dataProviderList.get(1);
-        provider.loadData().forEach(this::storeToDatabase);
-        System.out.println("fetching alteia have been finished");
-        //dataProviderList.stream().flatMap(DataProvider::loadData).forEach(this::storeToDatabase);
+        dataProviderList.stream()
+                .flatMap(DataProvider::loadData)
+                .forEach(this::storeToDatabase);
+        log.info("Scheduler finished at {}", Instant.now());
     }
 
     private void storeToDatabase(MedicineDto dto) {
         Medicine medicine = modelMapper.map(dto, Medicine.class);
         Price price = modelMapper.map(dto, Price.class);
 
+        Pharmacy pharmacy = new Pharmacy();
+        pharmacy.setName(dto.getPharmacy());
+        Pharmacy pharmacyFromDb = pharmacyRepository.findFirstByName(pharmacy.getName());
+        if (pharmacyFromDb != null) {
+            pharmacy.setId(pharmacyFromDb.getId());
+        }
         pharmacyRepository.save(pharmacy);
 
 
-        medicine.setId(null);
+        Medicine medFromDb = medicineRepository.findFirstByTitle(medicine.getTitle());
+        if (medFromDb == null) {
+            medicine.setId(null);
+        } else {
+            medicine.setId(medFromDb.getId());
+        }
         medicineRepository.save(medicine);
 
         price.setMedicineId(medicine.getId());
