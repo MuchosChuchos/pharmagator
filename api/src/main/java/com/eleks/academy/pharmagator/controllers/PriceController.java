@@ -61,12 +61,11 @@ public class PriceController {
     }
 
     @DeleteMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
-    public ResponseEntity<HttpStatus> deletePrice(@PathVariable("medicine_id") Long pharmacyId,
+    public void deletePrice(@PathVariable("medicine_id") Long pharmacyId,
                                             @PathVariable("pharmacy_id") Long medicineId) {
         PriceId id = new PriceId(medicineId, pharmacyId);
         Price price = priceRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
         priceRepository.delete(price);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }
