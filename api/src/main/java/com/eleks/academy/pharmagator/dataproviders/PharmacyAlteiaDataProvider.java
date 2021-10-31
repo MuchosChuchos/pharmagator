@@ -80,6 +80,10 @@ public class PharmacyAlteiaDataProvider implements DataProvider {
                         .pharmacy("Alteia")
                         .build());
             } catch (ArrayIndexOutOfBoundsException ex) {
+                /*
+                 Means that html page have not valid structure of medicine.
+                 price or title not exists
+                 */
                 log.info("Exception ({}) was on page: {}", ex.getMessage(), page.text());
             }
         }
