@@ -77,7 +77,6 @@ public class PharmacyAlteiaDataProvider implements DataProvider {
                         .externalId(this.getTextBetween(medsId.get(i).attr("href"), "product/", "/"))
                         .price(new BigDecimal(this.getTextBetween(medsPrice.get(i).text(), "", "\u20B4").replaceAll(",", "")))
                         .title(medsName.get(i).text())
-                        .pharmacy("Alteia")
                         .build());
             } catch (ArrayIndexOutOfBoundsException ex) {
                 /*

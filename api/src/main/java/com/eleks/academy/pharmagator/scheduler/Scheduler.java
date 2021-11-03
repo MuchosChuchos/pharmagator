@@ -8,7 +8,6 @@ import com.eleks.academy.pharmagator.entities.Price;
 import com.eleks.academy.pharmagator.repositories.MedicineRepository;
 import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import com.eleks.academy.pharmagator.repositories.PriceRepository;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -44,7 +43,6 @@ public class Scheduler {
         Price price = modelMapper.map(dto, Price.class);
 
         Pharmacy pharmacy = new Pharmacy();
-        pharmacy.setName(dto.getPharmacy());
         Pharmacy pharmacyFromDb = pharmacyRepository.findFirstByName(pharmacy.getName());
         if (pharmacyFromDb != null) {
             pharmacy.setId(pharmacyFromDb.getId());
