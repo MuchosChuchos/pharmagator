@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 @Service
 @Profile("!dummyProviderImpl")
 public class DummyProviderImpl implements DataProvider {
+
     @Override
     public Stream<MedicineDto> loadData() {
         return IntStream.rangeClosed(1, 2)
@@ -25,4 +26,5 @@ public class DummyProviderImpl implements DataProvider {
                 .pharmacy("Dummy")
                 .build();
     }
+
 }

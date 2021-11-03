@@ -1,28 +1,31 @@
 package com.eleks.academy.pharmagator.entities;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Data
 @Entity
-@Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "prices")
 @IdClass(PriceId.class)
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Price {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long pharmacyId;
+    private Long pharmacyId;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long medicineId;
-    BigDecimal price;
-    String externalId;
-    Instant updatedAt;
+    private Long medicineId;
+
+    private BigDecimal price;
+
+    private String externalId;
+
+    @Column(insertable = false, updatable = false)
+    private Instant updatedAt;
+
 }

@@ -1,71 +1,62 @@
 package com.eleks.academy.pharmagator.controllers;
 
-import com.eleks.academy.pharmagator.entities.Pharmacy;
+import com.eleks.academy.pharmagator.dataproviders.dto.input.PriceDto;
+import com.eleks.academy.pharmagator.entities.Medicine;
 import com.eleks.academy.pharmagator.entities.Price;
-import com.eleks.academy.pharmagator.entities.PriceId;
-import com.eleks.academy.pharmagator.exceptions.InvalidIdentifierException;
-import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
-import com.eleks.academy.pharmagator.repositories.PriceRepository;
+import com.eleks.academy.pharmagator.services.PriceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.HTML;
+import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
-@Controller
-@RequiredArgsConstructor
+@RestController
 @RequestMapping("/prices")
+@RequiredArgsConstructor
 public class PriceController {
 
-    private final PriceRepository priceRepository;
+    private final PriceService priceService;
 
     @GetMapping
-    public ResponseEntity<List<Price>> getAll(@RequestParam(required = false) Long medicineId,
-                                              @RequestParam(required = false) Long pharmacyId) {
-        if (medicineId == null && pharmacyId == null) {
-            return ResponseEntity.ok(priceRepository.findAll());
-        }
-
-        if (medicineId != null) {
-            if (pharmacyId != null)
-                return ResponseEntity.ok(priceRepository.findAllByMedicineIdAndPharmacyId(medicineId, pharmacyId));
-            return ResponseEntity.ok(priceRepository.findAllByMedicineId(medicineId));
-        }
-        return ResponseEntity.ok(priceRepository.findAllByPharmacyId(pharmacyId));
+    public List<Price> getAll() {
+        return this.priceService.findAll();
     }
 
-    @GetMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
-    public ResponseEntity<Price> getById(@PathVariable("medicine_id") Long pharmacyId,
-                                         @PathVariable("pharmacy_id") Long medicineId) {
-        PriceId id = new PriceId(medicineId, pharmacyId);
-        Price price = priceRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
-        return ResponseEntity.ok(price);
+    @GetMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
+    public ResponseEntity<Price> getById(
+            @PathVariable Long pharmacyId,
+            @PathVariable Long medicineId) {
+
+        return this.priceService.findById(pharmacyId, medicineId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Price> createPrice(@RequestBody Price price) {
-        return new ResponseEntity<>(priceRepository.save(price), HttpStatus.CREATED);
+    public Price create(@Valid @RequestBody PriceDto priceDto) {
+        return this.priceService.save(priceDto);
     }
 
-    @PutMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
-    public ResponseEntity<Price> updatePrice(
-            @PathVariable("medicine_id") Long medicineId,
-            @PathVariable("pharmacy_id") Long pharmacyId,
-            @RequestBody Price price) {
-        price.setPharmacyId(pharmacyId);
-        price.setMedicineId(medicineId);
-        return ResponseEntity.ok(priceRepository.save(price));
+    @PostMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
+    public ResponseEntity<Price> update(
+            @Valid @RequestBody PriceDto priceDto,
+            @PathVariable Long pharmacyId,
+            @PathVariable Long medicineId) {
+
+        return this.priceService.update(pharmacyId, medicineId, priceDto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/pharmacies/{pharmacy_id}/medicines/{medicine_id}")
-    public void deletePrice(@PathVariable("medicine_id") Long pharmacyId,
-                                            @PathVariable("pharmacy_id") Long medicineId) {
-        PriceId id = new PriceId(medicineId, pharmacyId);
-        Price price = priceRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
-        priceRepository.delete(price);
+    @DeleteMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
+    public ResponseEntity<?> delete(
+            @PathVariable Long pharmacyId,
+            @PathVariable Long medicineId) {
+
+        this.priceService.deleteById(pharmacyId, medicineId);
+        return ResponseEntity.noContent().build();
     }
 
 }

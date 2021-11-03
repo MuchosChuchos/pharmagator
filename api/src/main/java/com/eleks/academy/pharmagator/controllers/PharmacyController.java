@@ -1,48 +1,54 @@
 package com.eleks.academy.pharmagator.controllers;
 
+import com.eleks.academy.pharmagator.dataproviders.dto.input.PharmacyDto;
 import com.eleks.academy.pharmagator.entities.Pharmacy;
-import com.eleks.academy.pharmagator.exceptions.InvalidIdentifierException;
-import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
+import com.eleks.academy.pharmagator.services.PharmacyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/pharmacies")
 public class PharmacyController {
 
-    private final PharmacyRepository pharmacyRepository;
+    private final PharmacyService pharmacyService;
 
     @GetMapping
-    public ResponseEntity<List<Pharmacy>> getAll() {
-        return ResponseEntity.ok(pharmacyRepository.findAll());
+    public List<Pharmacy> getAll() {
+        return this.pharmacyService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Pharmacy> getById(@PathVariable("id") Long id) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
-        return ResponseEntity.ok(pharmacy);
+    @GetMapping("/{id:[\\d]+}")
+    public ResponseEntity<Pharmacy> getById(@PathVariable Long id) {
+
+        return this.pharmacyService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Pharmacy> createPharmacy(@RequestBody Pharmacy pharmacy) {
-        return new ResponseEntity<>(pharmacyRepository.save(pharmacy), HttpStatus.CREATED);
+    public ResponseEntity<Pharmacy> create(@Valid @RequestBody PharmacyDto pharmacyDto) {
+        return ResponseEntity.ok(this.pharmacyService.save(pharmacyDto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Pharmacy> updatePharmacy(@PathVariable("id") Long id, @RequestBody Pharmacy pharmacy) {
-        pharmacy.setId(id);
-        return ResponseEntity.ok(pharmacyRepository.save(pharmacy));
+    @PutMapping("/{id:[\\d]+}")
+    public ResponseEntity<Pharmacy> update(
+            @PathVariable Long id,
+            @Valid @RequestBody PharmacyDto pharmacyDto) {
+
+        return this.pharmacyService.update(id, pharmacyDto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") Long id) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
-        pharmacyRepository.delete(pharmacy);
+    @DeleteMapping("/{id:[\\d]+}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        this.pharmacyService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

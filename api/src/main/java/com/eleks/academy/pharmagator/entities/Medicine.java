@@ -1,20 +1,22 @@
 package com.eleks.academy.pharmagator.entities;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Data
 @Entity
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "medicines")
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Medicine {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String title;
+    private Long id;
+
+    private String title;
+
 }
