@@ -13,14 +13,40 @@ public class DataProvidersConfig {
     @Value("${pharmagator.data-providers.apteka-ds.url}")
     private String pharmacyDSBaseUrl;
 
-    @Bean(name = "pharmacyDSWebClient")
+    @Value("${pharmagator.data-providers.apteka-rozetka.url}")
+    private String pharmacyRozetkaBaseUrl;
+
+    @Value("${pharmagator.data-providers.apteka-alteia.url}")
+    private String pharmacyAlteiaBaseUrl;
+
+    @Bean
     public WebClient pharmacyDSWebClient() {
+        return getWebClientWithDefaultJsonHeadersSetup(pharmacyDSBaseUrl);
+    }
+
+    @Bean
+    public WebClient pharmacyRozetkaWebClient() {
+        return getWebClientWithDefaultJsonHeadersSetup(pharmacyRozetkaBaseUrl);
+    }
+
+    @Bean
+    public WebClient pharmacyAlteiaWebClient() {
+        return getWebRequestWithDefaultHtmlHeadersSetup(pharmacyAlteiaBaseUrl);
+    }
+
+    private WebClient getWebClientWithDefaultJsonHeadersSetup(String baseUrl) {
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .baseUrl(pharmacyDSBaseUrl)
+                .baseUrl(baseUrl)
                 .build();
     }
 
-
+    private WebClient getWebRequestWithDefaultHtmlHeadersSetup(String baseUrl) {
+        return WebClient.builder()
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML_VALUE)
+                .baseUrl(baseUrl)
+                .build();
+    }
 }
