@@ -15,3 +15,10 @@ pharmagator:
       category-fetch-url: /category-menu
       category-path: /cat-prods-by-page
       pharmacy-name: DS
+    pharmacy-anc:
+      url: https://anc.ua/productbrowser/v2/ua
+      category-fetch-url: /categories
+      page-size: 400
+    apteka-liki24:
+      url: https://liki24.com/vnext/api/catalogue/8000001/products
+      initial-page-index: 1
