@@ -44,6 +44,7 @@ public class Scheduler {
         Medicine medicine = modelMapper.map(dto, Medicine.class);
         Price price = modelMapper.map(dto, Price.class);
 
+
         String pharmacyName = dto.getPharmacy();
         Pharmacy pharmacyFromDb = pharmacyRepository.findFirstByName(pharmacyName);
         if (pharmacyFromDb == null) {
@@ -53,13 +54,16 @@ public class Scheduler {
         }
 
 
+        Long medicineId = null;
         Medicine medFromDb = medicineRepository.findByTitle(medicine.getTitle());
         if (medFromDb != null) {
-            medicine.setId(medFromDb.getId());
+            medicineId = medFromDb.getId();
+        } else {
+            medicineRepository.save(medicine);
         }
-        medicineRepository.save(medicine);
 
-        price.setMedicineId(medicine.getId());
+
+        price.setMedicineId(medicineId);
         price.setPharmacyId(pharmacyFromDb.getId());
         price.setUpdatedAt(Instant.now());
         price.setExternalId(dto.getExternalId());
