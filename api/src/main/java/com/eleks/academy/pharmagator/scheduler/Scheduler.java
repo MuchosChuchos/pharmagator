@@ -11,6 +11,7 @@ import com.eleks.academy.pharmagator.repositories.PriceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
+@Profile("!test")
 @RequiredArgsConstructor
 public class Scheduler {
 
@@ -42,25 +44,23 @@ public class Scheduler {
         Medicine medicine = modelMapper.map(dto, Medicine.class);
         Price price = modelMapper.map(dto, Price.class);
 
-        Pharmacy pharmacy = new Pharmacy();
-        pharmacy.setName(dto.getPharmacy());
-        Pharmacy pharmacyFromDb = pharmacyRepository.findFirstByName(pharmacy.getName());
-        if (pharmacyFromDb != null) {
-            pharmacy.setId(pharmacyFromDb.getId());
+        String pharmacyName = dto.getPharmacy();
+        Pharmacy pharmacyFromDb = pharmacyRepository.findFirstByName(pharmacyName);
+        if (pharmacyFromDb == null) {
+            Pharmacy pharmacy = new Pharmacy();
+            pharmacy.setName(pharmacyName);
+            pharmacyFromDb = pharmacyRepository.save(pharmacy);
         }
-        pharmacyRepository.save(pharmacy);
 
 
-        Medicine medFromDb = medicineRepository.findFirstByTitle(medicine.getTitle());
-        if (medFromDb == null) {
-            medicine.setId(null);
-        } else {
+        Medicine medFromDb = medicineRepository.findByTitle(medicine.getTitle());
+        if (medFromDb != null) {
             medicine.setId(medFromDb.getId());
         }
         medicineRepository.save(medicine);
 
         price.setMedicineId(medicine.getId());
-        price.setPharmacyId(pharmacy.getId());
+        price.setPharmacyId(pharmacyFromDb.getId());
         price.setUpdatedAt(Instant.now());
         price.setExternalId(dto.getExternalId());
         priceRepository.save(price);
