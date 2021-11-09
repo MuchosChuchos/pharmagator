@@ -33,7 +33,7 @@ public class PharmacyANCDataProvider implements DataProvider {
     private Long pageSize;
 
     @Value("${pharmagator.data-providers.pharmacy-anc.pharmacy-name}")
-    private String PHARMACY_NAME;
+    private String pharmacyName;
 
     @Override
     public Stream<MedicineDto> loadData() {
@@ -81,7 +81,7 @@ public class PharmacyANCDataProvider implements DataProvider {
                 .externalId(ancMedicineDTO.getId())
                 .price(ancMedicineDTO.getPrice())
                 .title(ancMedicineDTO.getName())
-                .pharmacy(PHARMACY_NAME)
+                .pharmacy(pharmacyName)
                 .build();
     }
 

@@ -46,7 +46,7 @@ public class PharmacyRozetkaDataProvider implements DataProvider {
     private String productsPath;
 
     @Value("${pharmagator.data-providers.apteka-rozetka.pharmacy-name}")
-    private String PHARMACY_NAME;
+    private String pharmacyName;
 
     @Override
     public Stream<MedicineDto> loadData() {
@@ -101,7 +101,7 @@ public class PharmacyRozetkaDataProvider implements DataProvider {
                 .externalId(rozetkaMedicineDto.getId().toString())
                 .price(rozetkaMedicineDto.getPrice())
                 .title(rozetkaMedicineDto.getTitle())
-                .pharmacy(PHARMACY_NAME)
+                .pharmacy(pharmacyName)
                 .build();
     }
 

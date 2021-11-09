@@ -33,7 +33,7 @@ public class PharmacyDSDataProvider implements DataProvider {
     private String categoryPath;
 
     @Value("${pharmagator.data-providers.apteka-ds.pharmacy-name}")
-    private String PHARMACY_NAME;
+    private String pharmacyName;
 
     @Override
     public Stream<MedicineDto> loadData() {
@@ -101,7 +101,7 @@ public class PharmacyDSDataProvider implements DataProvider {
                 .externalId(dsMedicineDto.getId())
                 .price(dsMedicineDto.getPrice())
                 .title(dsMedicineDto.getName())
-                .pharmacy(PHARMACY_NAME)
+                .pharmacy(pharmacyName)
                 .build();
     }
 
