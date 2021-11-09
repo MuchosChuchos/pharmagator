@@ -32,6 +32,9 @@ public class PharmacyLiki24DataProvider implements DataProvider {
     @Value("${pharmagator.data-providers.apteka-liki24.initial-page-index}")
     private Long initialPageIndex;
 
+    @Value("${pharmagator.data-providers.apteka-liki24.pharmacy-name}")
+    private String PHARMACY_NAME;
+
     @Override
     public Stream<MedicineDto> loadData() {
 
@@ -79,6 +82,7 @@ public class PharmacyLiki24DataProvider implements DataProvider {
                 .externalId(liki24MedicineDto.getProductId())
                 .title(liki24MedicineDto.getName())
                 .price(price)
+                .pharmacy(PHARMACY_NAME)
                 .build();
     }
 

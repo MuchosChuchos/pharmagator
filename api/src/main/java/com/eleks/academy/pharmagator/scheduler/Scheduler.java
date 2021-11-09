@@ -34,7 +34,7 @@ public class Scheduler {
     @Scheduled(fixedDelay = 100, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
-        dataProviderList.stream()
+        dataProviderList.parallelStream()
                 .flatMap(DataProvider::loadData)
                 .forEach(this::storeToDatabase);
         log.info("Scheduler finished at {}", Instant.now());
@@ -54,12 +54,12 @@ public class Scheduler {
         }
 
 
-        Long medicineId = null;
+        Long medicineId;
         Medicine medFromDb = medicineRepository.findByTitle(medicine.getTitle());
         if (medFromDb != null) {
             medicineId = medFromDb.getId();
         } else {
-            medicineRepository.save(medicine);
+            medicineId = medicineRepository.save(medicine).getId();
         }
 
 
