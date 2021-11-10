@@ -26,9 +26,13 @@ import java.util.concurrent.TimeUnit;
 public class Scheduler {
 
     private final List<DataProvider> dataProviderList;
+
     private final PriceRepository priceRepository;
+
     private final PharmacyRepository pharmacyRepository;
+
     private final MedicineRepository medicineRepository;
+
     private final ModelMapper modelMapper;
 
     @Scheduled(fixedDelay = 100, timeUnit = TimeUnit.MINUTES)
@@ -44,7 +48,6 @@ public class Scheduler {
         Medicine medicine = modelMapper.map(dto, Medicine.class);
         Price price = modelMapper.map(dto, Price.class);
 
-
         String pharmacyName = dto.getPharmacyName();
         Pharmacy pharmacyFromDb = pharmacyRepository.findByName(pharmacyName).orElseGet(() -> {
             Pharmacy pharmacy = new Pharmacy();
@@ -52,9 +55,7 @@ public class Scheduler {
             return pharmacyRepository.save(pharmacy);
         });
 
-
         Medicine medicineFromDb = medicineRepository.findByTitle(medicine.getTitle()).orElseGet(() -> medicineRepository.save(medicine));
-
 
         price.setMedicineId(medicineFromDb.getId());
         price.setPharmacyId(pharmacyFromDb.getId());
