@@ -46,24 +46,17 @@ public class Scheduler {
 
 
         String pharmacyName = dto.getPharmacyName();
-        Pharmacy pharmacyFromDb = pharmacyRepository.findByName(pharmacyName);
-        if (pharmacyFromDb == null) {
+        Pharmacy pharmacyFromDb = pharmacyRepository.findByName(pharmacyName).orElseGet(() -> {
             Pharmacy pharmacy = new Pharmacy();
             pharmacy.setName(pharmacyName);
-            pharmacyFromDb = pharmacyRepository.save(pharmacy);
-        }
+            return pharmacyRepository.save(pharmacy);
+        });
 
 
-        Long medicineId;
-        Medicine medFromDb = medicineRepository.findByTitle(medicine.getTitle());
-        if (medFromDb != null) {
-            medicineId = medFromDb.getId();
-        } else {
-            medicineId = medicineRepository.save(medicine).getId();
-        }
+        Medicine medicineFromDb = medicineRepository.findByTitle(medicine.getTitle()).orElseGet(() -> medicineRepository.save(medicine));
 
 
-        price.setMedicineId(medicineId);
+        price.setMedicineId(medicineFromDb.getId());
         price.setPharmacyId(pharmacyFromDb.getId());
         price.setUpdatedAt(Instant.now());
         price.setExternalId(dto.getExternalId());
