@@ -2,12 +2,12 @@ package com.eleks.academy.pharmagator.dataproviders.dto.input;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class MedicineDto {
 
-    @NotNull
+    @NotBlank
     private String title;
 
 }

@@ -3,17 +3,17 @@ package com.eleks.academy.pharmagator.dataproviders.dto.input;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 @Data
 public class PriceDto {
 
     @Min(value = 0)
-    @NotNull
+    @NotBlank
     private BigDecimal price;
 
-    @NotNull
+    @NotBlank
     private String externalId;
 
 }
