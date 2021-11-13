@@ -12,17 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,7 +75,7 @@ public class PharmacyControllerTest {
     void getById_ok() throws Exception {
         doReturn(Optional.of(pharmacy)).when(pharmacyService).findById(12L);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URI + "/12").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URI + "/" + pharmacy.getId()).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.medicineLinkTemplate").exists())
@@ -105,14 +106,79 @@ public class PharmacyControllerTest {
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.medicineLinkTemplate").exists())
                 .andExpect(jsonPath("$.name").value(pharmacy.getName()))
-                .andExpect(jsonPath("$.medicineLinkTemplate").value(pharmacy.getMedicineLinkTemplate()));
+                .andExpect(jsonPath("$.medicineLinkTemplate").value(pharmacy.getMedicineLinkTemplate()))
+                .andDo(print());
     }
 
     @Test
-    void update_notValidRequestBody_() {
+    void create_invalidRequestBody_400Code() throws Exception {
+        doReturn(pharmacy).when(pharmacyService).save(modelMapper.map(pharmacy, PharmacyDto.class));
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.post(BASE_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "ne": "string",
+                                  "234": 124
+                                }
+                                """)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
     }
 
     @Test
-    void delete() {
+    void update_ok() throws Exception {
+        doReturn(Optional.of(pharmacy)).when(pharmacyService).update(pharmacy.getId(), modelMapper.map(pharmacy, PharmacyDto.class));
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.put(BASE_URI + "/" + pharmacy.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(modelMapper.map(pharmacy, PharmacyDto.class)))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").exists())
+                .andExpect(jsonPath("$.medicineLinkTemplate").exists())
+                .andExpect(jsonPath("$.name").value(pharmacy.getName()))
+                .andExpect(jsonPath("$.medicineLinkTemplate").value(pharmacy.getMedicineLinkTemplate()))
+                .andDo(print());
     }
+
+    @Test
+    void update_invalidRequestBody_400Code() throws Exception {
+        doReturn(Optional.of(pharmacy)).when(pharmacyService).update(pharmacy.getId(), modelMapper.map(pharmacy, PharmacyDto.class));
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.post(BASE_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "ne": "string",
+                                  "234": 124
+                                }
+                                """)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    void delete_ok() throws Exception {
+        doNothing().when(pharmacyService).deleteById(pharmacy.getId());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URI + "/" + pharmacy.getId()))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    @Test
+    void delete_invalidId_404Code() throws Exception {
+        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid pharmacy id")).when(pharmacyService).deleteById(pharmacy.getId());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URI + "/1123768"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
 }
