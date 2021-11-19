@@ -2,6 +2,7 @@ package com.eleks.academy.pharmagator.services;
 
 import com.eleks.academy.pharmagator.dataproviders.dto.input.MedicineDto;
 import com.eleks.academy.pharmagator.entities.Medicine;
+import com.eleks.academy.pharmagator.exceptions.InvalidIdentifierException;
 import com.eleks.academy.pharmagator.repositories.MedicineRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -44,7 +45,8 @@ public class MedicineServiceImpl implements MedicineService {
     }
 
     public void delete(Long id) {
-        medicineRepository.deleteById(id);
+        Medicine medicine = medicineRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
+        medicineRepository.delete(medicine);
     }
 
 }
