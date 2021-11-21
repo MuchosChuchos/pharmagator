@@ -51,7 +51,7 @@ public class MedicineController {
 
     @DeleteMapping("/{id:[\\d]+}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        medicineService.delete(id);
+        medicineService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
