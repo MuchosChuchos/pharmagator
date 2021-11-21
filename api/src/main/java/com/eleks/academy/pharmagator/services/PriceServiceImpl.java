@@ -3,10 +3,9 @@ package com.eleks.academy.pharmagator.services;
 import com.eleks.academy.pharmagator.dataproviders.dto.input.PriceDto;
 import com.eleks.academy.pharmagator.entities.Price;
 import com.eleks.academy.pharmagator.entities.PriceId;
-import com.eleks.academy.pharmagator.repositories.MedicineRepository;
-import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import com.eleks.academy.pharmagator.repositories.PriceRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -16,11 +15,10 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PriceServiceImpl implements PriceService {
 
     private final PriceRepository priceRepository;
-    private final MedicineRepository medicineRepository;
-    private final PharmacyRepository pharmacyRepository;
 
     private final ModelMapper modelMapper;
 
@@ -55,7 +53,7 @@ public class PriceServiceImpl implements PriceService {
         try {
             priceRepository.deleteById(priceId);
         } catch (EmptyResultDataAccessException exception) {
-            exception.printStackTrace();
+            log.info(exception.getMessage(), exception);
         }
     }
 
