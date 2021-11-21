@@ -3,12 +3,12 @@ package com.eleks.academy.pharmagator.services;
 import com.eleks.academy.pharmagator.dataproviders.dto.input.PriceDto;
 import com.eleks.academy.pharmagator.entities.Price;
 import com.eleks.academy.pharmagator.entities.PriceId;
-import com.eleks.academy.pharmagator.exceptions.InvalidIdentifierException;
 import com.eleks.academy.pharmagator.repositories.MedicineRepository;
 import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import com.eleks.academy.pharmagator.repositories.PriceRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,9 +51,12 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public void deleteById(Long pharmacyId, Long medicineId) {
-        PriceId id = new PriceId(medicineId, pharmacyId);
-        Price price = priceRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(pharmacyId, medicineId));
-        priceRepository.delete(price);
+        PriceId priceId = new PriceId(pharmacyId, medicineId);
+        try {
+            priceRepository.deleteById(priceId);
+        } catch (EmptyResultDataAccessException exception) {
+            exception.printStackTrace();
+        }
     }
 
 }

@@ -2,10 +2,10 @@ package com.eleks.academy.pharmagator.services;
 
 import com.eleks.academy.pharmagator.dataproviders.dto.input.PharmacyDto;
 import com.eleks.academy.pharmagator.entities.Pharmacy;
-import com.eleks.academy.pharmagator.exceptions.InvalidIdentifierException;
 import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,8 +46,11 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public void deleteById(Long id) {
-        Pharmacy pharmacy = pharmacyRepository.findById(id).orElseThrow(() -> new InvalidIdentifierException(id));
-        pharmacyRepository.delete(pharmacy);
+        try {
+            pharmacyRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception) {
+            exception.printStackTrace();
+        }
     }
 
 }
