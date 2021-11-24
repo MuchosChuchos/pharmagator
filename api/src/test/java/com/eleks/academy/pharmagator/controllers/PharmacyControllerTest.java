@@ -12,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -173,11 +171,11 @@ public class PharmacyControllerTest {
     }
 
     @Test
-    void delete_invalidId_404Code() throws Exception {
-        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid pharmacy id")).when(pharmacyService).deleteById(pharmacy.getId());
+    void delete_invalidId_200Code() throws Exception {
+        doNothing().when(pharmacyService).deleteById(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URI + "/1123768"))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 
