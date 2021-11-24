@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WebMvcTest(PharmacyController.class)
 @Import({ModelMapperConfig.class})
-public class PharmacyControllerTest {
+class PharmacyControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,7 +60,7 @@ public class PharmacyControllerTest {
     }
 
     @Test
-    public void getAll_ok() throws Exception {
+    void getAll_ok() throws Exception {
         doReturn(pharmacyList).when(pharmacyService).findAll();
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_URI).accept(MediaType.APPLICATION_JSON))
@@ -95,8 +95,7 @@ public class PharmacyControllerTest {
     void create_ok() throws Exception {
         doReturn(pharmacy).when(pharmacyService).save(modelMapper.map(pharmacy, PharmacyDto.class));
 
-        mockMvc
-                .perform(MockMvcRequestBuilders.post(BASE_URI)
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modelMapper.map(pharmacy, PharmacyDto.class)))
                         .accept(MediaType.APPLICATION_JSON))
@@ -112,8 +111,7 @@ public class PharmacyControllerTest {
     void create_invalidRequestBody_400Code() throws Exception {
         doReturn(pharmacy).when(pharmacyService).save(modelMapper.map(pharmacy, PharmacyDto.class));
 
-        mockMvc
-                .perform(MockMvcRequestBuilders.post(BASE_URI)
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -130,8 +128,7 @@ public class PharmacyControllerTest {
     void update_ok() throws Exception {
         doReturn(Optional.of(pharmacy)).when(pharmacyService).update(pharmacy.getId(), modelMapper.map(pharmacy, PharmacyDto.class));
 
-        mockMvc
-                .perform(MockMvcRequestBuilders.put(BASE_URI + "/" + pharmacy.getId())
+        mockMvc.perform(MockMvcRequestBuilders.put(BASE_URI + "/" + pharmacy.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modelMapper.map(pharmacy, PharmacyDto.class)))
                         .accept(MediaType.APPLICATION_JSON))
@@ -147,8 +144,7 @@ public class PharmacyControllerTest {
     void update_invalidRequestBody_400Code() throws Exception {
         doReturn(Optional.of(pharmacy)).when(pharmacyService).update(pharmacy.getId(), modelMapper.map(pharmacy, PharmacyDto.class));
 
-        mockMvc
-                .perform(MockMvcRequestBuilders.post(BASE_URI)
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
