@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -60,6 +61,17 @@ public class ExportService {
                 .stream()
                 .collect(Collectors.groupingBy(MedicinePrice::getTitle,
                         Collectors.toMap(MedicinePrice::getPharmacyId, MedicinePrice::getPrice)));
+    }
+
+    public Map<String, Map<Long, BigDecimal>> getMapPricesFromDatabasePaginated(Pageable pageable) {
+         return priceRepository.findAllMedicinesPricesPaginated(pageable)
+                .stream()
+                .collect(Collectors.groupingBy(MedicinePrice::getTitle,
+                        Collectors.toMap(MedicinePrice::getPharmacyId, MedicinePrice::getPrice)));
+    }
+
+    public Long getRowsCountOfPrices() {
+        return priceRepository.count();
     }
 
     private void buildMedicineRow(XSSFSheet sheet, XSSFCellStyle firstColumnStyle, AtomicInteger rowIndex, HashMap<Long, Integer> pharmacyColumnMapping, String medicineTitle, Map<Long, BigDecimal> phs) {
