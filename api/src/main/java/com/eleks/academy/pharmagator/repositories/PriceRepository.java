@@ -17,14 +17,15 @@ public interface PriceRepository extends JpaRepository<Price, PriceId> {
             FROM Price p
             LEFT JOIN Medicine m ON m.id = p.medicineId
             """)
-    List<MedicinePrice> findAllMedicinesPrices();
+    List<MedicinePrice> findAllMedicinesPrices(Pageable pageable);
 
     @Query("""
             SELECT p.price as price, m.title as title, p.pharmacyId as pharmacyId
             FROM Price p
             LEFT JOIN Medicine m ON m.id = p.medicineId
+            WHERE title LIKE %?1%
             """)
-    List<MedicinePrice> findAllMedicinesPricesPaginated(Pageable pageable);
+    List<MedicinePrice> searchMedicinesPrices(String keyword);
 
     Optional<Price> findByPrice(BigDecimal price);
 }

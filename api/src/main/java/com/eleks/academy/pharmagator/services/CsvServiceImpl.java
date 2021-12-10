@@ -70,7 +70,7 @@ public class CsvServiceImpl implements CsvService {
     }
 
     private void addRows() {
-        priceRepository.findAllMedicinesPrices().stream()
+        priceRepository.findAllMedicinesPrices(null).stream()
                 .map(this::createRow)
                 .forEach(row -> row.forEach(this::write));
     }

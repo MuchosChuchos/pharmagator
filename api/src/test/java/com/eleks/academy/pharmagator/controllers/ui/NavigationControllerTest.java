@@ -87,7 +87,7 @@ class NavigationControllerTest {
     @Test
     void getPrices_ok() throws Exception {
         doReturn(pharmacies).when(pharmacyService).findAll();
-        doReturn(prices).when(exportService).getMapPricesFromDatabase();
+        doReturn(prices).when(exportService).getMapPricesFromDatabase(null);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_URI + "/price"))
                 .andExpect(status().isOk())

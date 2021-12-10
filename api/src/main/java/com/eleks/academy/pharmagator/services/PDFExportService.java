@@ -55,7 +55,7 @@ public class PDFExportService {
     }
 
     private void findAllMedicinesPrices() {
-        this.prices = this.priceRepository.findAllMedicinesPrices().stream()
+        this.prices = this.priceRepository.findAllMedicinesPrices(null).stream()
                 .collect(groupingBy(MedicinePrice::getTitle,
                         toMap(MedicinePrice::getPharmacyId, MedicinePrice::getPrice)));
     }

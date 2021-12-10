@@ -87,7 +87,7 @@ class PDFExportServiceTest {
         File file = new File(filepath);
 
         when(pharmacyRepository.findAll()).thenReturn(pharmacies);
-        when(priceRepository.findAllMedicinesPrices()).thenReturn(prices);
+        when(priceRepository.findAllMedicinesPrices(null)).thenReturn(prices);
 
         byte[] bytes = pdfExportService.export();
         FileOutputStream fileInputStream = new FileOutputStream(file.getAbsolutePath());
@@ -121,7 +121,7 @@ class PDFExportServiceTest {
     @Test
     void createBaseFont_throwsDocumentException() {
         when(pharmacyRepository.findAll()).thenReturn(pharmacies);
-        when(priceRepository.findAllMedicinesPrices()).thenReturn(prices);
+        when(priceRepository.findAllMedicinesPrices(null)).thenReturn(prices);
 
         try (MockedStatic<BaseFont> baseFont = Mockito.mockStatic(BaseFont.class)) {
             baseFont.when(() -> BaseFont.createFont(anyString(), anyString(), anyBoolean()))
@@ -136,7 +136,7 @@ class PDFExportServiceTest {
     @Test
     void createBaseFont_throwsIOException() {
         when(pharmacyRepository.findAll()).thenReturn(pharmacies);
-        when(priceRepository.findAllMedicinesPrices()).thenReturn(prices);
+        when(priceRepository.findAllMedicinesPrices(null)).thenReturn(prices);
 
         try (MockedStatic<BaseFont> baseFont = Mockito.mockStatic(BaseFont.class)) {
             baseFont.when(() -> BaseFont.createFont(anyString(), anyString(), anyBoolean()))
