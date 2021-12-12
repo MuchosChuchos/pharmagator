@@ -36,6 +36,8 @@ public class PDFExportService {
     private Map<String, Map<Long, BigDecimal>> prices;
     private PdfPTable table;
 
+    private String pathToFont = "api/src/main/resources/fonts/FreeSerif.ttf";
+
     public byte[] export() {
         Document document = new Document();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -89,8 +91,7 @@ public class PDFExportService {
 
     private void addMedicineCell(String medicineName) {
         try {
-            String fontStyle = "api/src/main/resources/fonts/FreeSerif.ttf";
-            BaseFont baseFont = BaseFont.createFont(fontStyle, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont baseFont = BaseFont.createFont(pathToFont, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font font = new Font(baseFont, 12, Font.NORMAL);
 
             PdfPCell medicineNameColumn = new PdfPCell(new Paragraph(medicineName, font));

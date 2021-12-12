@@ -13,6 +13,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,6 +58,11 @@ class PDFExportServiceTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private static final String FONT_STYLE = "src/main/resources/fonts/FreeSerif.ttf";
+    private static final String EXCEPTED_PATH_FONT_STYLE = "api/src/main/resources/fonts/FreeSerif.ttf";
+    private static BaseFont BASE_FONT;
+
+    @SneakyThrows
     @BeforeEach
     void setUp() {
         pharmacies = Arrays.asList(
@@ -64,6 +70,8 @@ class PDFExportServiceTest {
                 new Pharmacy(2L, "3I", "Link"),
                 new Pharmacy(3L, "Liki24", "Link")
         );
+
+        BASE_FONT = BaseFont.createFont(FONT_STYLE, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         prices = Arrays.asList(
                 new MedicinePriceImpl("Aspirin", 1L, BigDecimal.valueOf(25.25)),
@@ -88,6 +96,8 @@ class PDFExportServiceTest {
 
         when(pharmacyRepository.findAll()).thenReturn(pharmacies);
         when(priceRepository.findAllMedicinesPrices(null)).thenReturn(prices);
+
+        FieldUtils.writeField(pdfExportService, "pathToFont", "src/main/resources/fonts/FreeSerif.ttf", true);
 
         byte[] bytes = pdfExportService.export();
         FileOutputStream fileInputStream = new FileOutputStream(file.getAbsolutePath());
