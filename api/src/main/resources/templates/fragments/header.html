@@ -30,9 +30,18 @@
             </li>
             </li>
             <li class="nav-item" th:class="${#httpServletRequest.requestURI.contains('search')} ? 'nav-link active' : 'nav-link'">
-<!--            <li class="nav-item" th:class="${activePage == 'input'} ? 'nav-item active' : 'nav-item'">-->
+<!--            <li class="nav-item" th:class="${activePage == 'search'} ? 'nav-item active' : 'nav-item'">-->
                 <a class="nav-link" th:href="@{/ui/search}">Search</a>
             </li>
+            <li class="nav-item" th:class="${#httpServletRequest.requestURI.contains('export')} ? 'nav-link active' : 'nav-link'">
+                <!--            <li class="nav-item" th:class="${activePage == 'export'} ? 'nav-item active' : 'nav-item'">-->
+                <a class="nav-link" th:href="@{/ui/export}">Export</a>
+            </li>
+            <li class="nav-item" th:class="${#httpServletRequest.requestURI.contains('upload')} ? 'nav-link active' : 'nav-link'">
+                <!--            <li class="nav-item" th:class="${activePage == 'upload'} ? 'nav-item active' : 'nav-item'">-->
+                <a class="nav-link" th:href="@{/ui/upload}">Import</a>
+            </li>
+
         </ul>
         <div>
             <a href="https://eleks.com" aria-label="Logo">

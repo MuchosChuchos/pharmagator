@@ -19,15 +19,20 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/export")
+@RequestMapping("/ui/export")
 public class ExportController {
 
     private final ExportService exportService;
     private final PDFExportService pdfExportService;
     private final CsvService csvService;
 
-    @SneakyThrows
     @GetMapping
+    public String getExportPage() {
+        return "exportData";
+    }
+
+    @SneakyThrows
+    @GetMapping("/xlsx")
     public void export(HttpServletResponse response) {
         XSSFWorkbook workbook = exportService.getExportData();
         ServletOutputStream outputStream = response.getOutputStream();
@@ -46,6 +51,7 @@ public class ExportController {
         ByteArrayResource resource = new ByteArrayResource(bytes);
 
         HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=export.pdf");
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
 
@@ -62,6 +68,7 @@ public class ExportController {
         ByteArrayResource resource = new ByteArrayResource(bytes);
 
         HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=export.csv");
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
 
