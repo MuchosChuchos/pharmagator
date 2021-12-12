@@ -89,7 +89,7 @@ public class PDFExportService {
 
     private void addMedicineCell(String medicineName) {
         try {
-            String fontStyle = "src/main/resources/fonts/FreeSerif.ttf";
+            String fontStyle = "api/src/main/resources/fonts/FreeSerif.ttf";
             BaseFont baseFont = BaseFont.createFont(fontStyle, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font font = new Font(baseFont, 12, Font.NORMAL);
 
