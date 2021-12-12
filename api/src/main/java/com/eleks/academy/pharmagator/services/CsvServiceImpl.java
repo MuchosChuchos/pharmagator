@@ -30,7 +30,8 @@ public class CsvServiceImpl implements CsvService {
     private final CsvParser parser;
     private final BeanListProcessor<MedicineDto> rowProcessor;
     private final ImportService importService;
-    private static final String TYPE = "text/csv";
+    private static final String CSV_TYPE = "text/csv";
+    private static final String EXCEL_CSV_TYPE = "application/vnd.ms-excel";
 
     private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     private final PharmacyRepository pharmacyRepository;
@@ -39,7 +40,7 @@ public class CsvServiceImpl implements CsvService {
 
     @Override
     public String parseAndSave(MultipartFile file) {
-        if (Objects.equals(file.getContentType(), TYPE)) {
+        if (file.getContentType().equals(CSV_TYPE)||file.getContentType().equals(EXCEL_CSV_TYPE)) {
             try {
                 InputStream inputStream = file.getInputStream();
                 parser.parse(inputStream);
