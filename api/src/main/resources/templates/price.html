@@ -16,6 +16,10 @@
       <h1 class="display-4">Price</h1>
     </div>
 
+    <form th:action="@{/scheduler}" method="get">
+      <button id="refresh" class="btn btn-primary" onclick="disableBtn(id)">Refresh Data</button>
+    </form>
+
     <div th:switch="${pricesMap}">
       <h2 th:case="null">No medicines yet!</h2>
       <div th:case="*">
@@ -71,5 +75,44 @@
         crossorigin="anonymous"></script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<script>
+  function disableBtn(id){
+    setTimeout(function (){document.getElementById("refresh").disabled = true;
+      setTimeout(function(){document.getElementById("refresh").disabled = false;},30000);},1);
+  }
+  function mySubmitFunction()
+  {
+    return false;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Register form submit event handler for every form in your page
+    const forms = document.querySelectorAll('form');
+    if (forms) {
+      forms.forEach(f => {
+        let action = f.action;
+        f.addEventListener('submit', (event) => {
+          // prevent default behavior, i.e., form submission
+          event.preventDefault();
+          // perform server side request. you can use several options
+          // see https://developers.google.com/web/updates/2015/03/introduction-to-fetch, for instance
+          // For example, let's use fetch (https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+          fetch(action)
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                    }
+                    console.log('Request successfully completed');
+                  })
+                  .catch((error) => {
+                    console.error('There has been a problem while contacting server:',      error);
+                  });
+        });
+      });
+    }
+  });
+
+</script>
 </body>
 </html>
