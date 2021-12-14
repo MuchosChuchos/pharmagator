@@ -26,7 +26,7 @@ public class ExportController {
     private final PDFExportService pdfExportService;
     private final CsvService csvService;
 
-    private final static String HEADER_NAME = "Content-Disposition";
+    private String defaultHeaderName = "Content-Disposition";
 
     @GetMapping
     public String getExportPage() {
@@ -39,7 +39,7 @@ public class ExportController {
         XSSFWorkbook workbook = exportService.getExportData();
         ServletOutputStream outputStream = response.getOutputStream();
 
-        response.addHeader(HEADER_NAME, "attachment; filename=export.xlsx");
+        response.addHeader(defaultHeaderName, "attachment; filename=export.xlsx");
 
         workbook.write(outputStream);
 
@@ -53,7 +53,7 @@ public class ExportController {
         ByteArrayResource resource = new ByteArrayResource(bytes);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HEADER_NAME, "attachment; filename=export.pdf");
+        headers.add(defaultHeaderName, "attachment; filename=export.pdf");
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
 
@@ -70,7 +70,7 @@ public class ExportController {
         ByteArrayResource resource = new ByteArrayResource(bytes);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HEADER_NAME, "attachment; filename=export.csv");
+        headers.add(defaultHeaderName, "attachment; filename=export.csv");
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
 

@@ -20,7 +20,7 @@ public class PageWrapper<T> {
     private String sortDirection;
 
 
-    public PageWrapper(Page<T> page, String url,String sortDirection){
+    public PageWrapper(Page<T> page, String url, String sortDirection){
         this.sortDirection = sortDirection;
         this.page = page;
         this.url = url;
@@ -69,11 +69,11 @@ public class PageWrapper<T> {
         this.sortDirection = sortDirection;
     }
 
-    public List<PageItem> getItems(){
+    public List<PageItem> getItems() {
         return items;
     }
 
-    public int getNumber(){
+    public int getNumber() {
         return currentNumber;
     }
 
@@ -89,7 +89,9 @@ public class PageWrapper<T> {
         return page.getTotalPages();
     }
 
-    public long getTotalElements() {return page.getTotalElements();}
+    public long getTotalElements() {
+        return page.getTotalElements();
+    }
 
     public boolean isFirstPage(){
         return page.isFirst();

@@ -58,10 +58,6 @@ class PDFExportServiceTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String FONT_STYLE = "src/main/resources/fonts/FreeSerif.ttf";
-    private static final String EXCEPTED_PATH_FONT_STYLE = "api/src/main/resources/fonts/FreeSerif.ttf";
-    private static BaseFont BASE_FONT;
-
     @SneakyThrows
     @BeforeEach
     void setUp() {
@@ -70,8 +66,6 @@ class PDFExportServiceTest {
                 new Pharmacy(2L, "3I", "Link"),
                 new Pharmacy(3L, "Liki24", "Link")
         );
-
-        BASE_FONT = BaseFont.createFont(FONT_STYLE, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         prices = Arrays.asList(
                 new MedicinePriceImpl("Aspirin", 1L, BigDecimal.valueOf(25.25)),
