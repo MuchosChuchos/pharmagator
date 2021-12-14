@@ -18,10 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +37,7 @@ public class CsvServiceImpl implements CsvService {
 
     @Override
     public String parseAndSave(MultipartFile file) {
-        if (file.getContentType().equals(CSV_TYPE)||file.getContentType().equals(EXCEL_CSV_TYPE)) {
+        if (EXCEL_CSV_TYPE.equals(file.getContentType())||CSV_TYPE.equals(file.getContentType())) {
             try {
                 InputStream inputStream = file.getInputStream();
                 parser.parse(inputStream);

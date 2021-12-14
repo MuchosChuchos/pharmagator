@@ -28,7 +28,9 @@ public class PageWrapper<T> {
 
         currentNumber = page.getNumber();
 
-        int start, size;
+        int start;
+        int size;
+
         if (page.getTotalPages() <= MAX_PAGE_ITEM_DISPLAY){
             start = 1;
             size = page.getTotalPages();

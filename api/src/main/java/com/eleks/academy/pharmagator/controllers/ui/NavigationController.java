@@ -69,7 +69,8 @@ public class NavigationController {
         totalPages = totalCountOfPrices / (2L * itemsPerPage);
 
         List<PageWrapper.PageItem> pageItems = new ArrayList<>();
-        int start, size;
+        int start;
+        int size;
 
         if (totalPages <= MAX_PAGE_ITEM_DISPLAY) {
             start = 1;
