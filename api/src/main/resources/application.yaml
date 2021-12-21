@@ -62,3 +62,5 @@ pharmagator:
       url: https://apteka.alteia.ua/shop
       products-fetch-url: /page
       pharmacy-name: pharmacy-alteia
+      page-limit: 5
+      start-page-to-parse: 2

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 @Qualifier(value = "socialnaParser")
 public class SocialnaParser {
 
-    @Value("${pharmagator.data-providers.apteka-socialna.pharmacy-name}")
+    @Value("${pharmagator.data-providers.pharmacy-socialna.pharmacy-name}")
     private String pharmacyName;
 
     public Stream<MedicineDto> getMedicinesFromPageByUrl(String url) {

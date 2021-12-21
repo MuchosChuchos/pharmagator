@@ -15,10 +15,10 @@ import java.util.stream.Stream;
 @Qualifier("pharmacySocialnaDataProvider")
 public class PharmacySocialnaDataProvider implements DataProvider {
 
-    @Value("${pharmagator.data-providers.apteka-socialna.url}")
+    @Value("${pharmagator.data-providers.pharmacy-socialna.url}")
     private String pharmacySocialnaBaseUrl;
 
-    @Value("${pharmagator.data-providers.apteka-socialna.page-limit}")
+    @Value("${pharmagator.data-providers.pharmacy-socialna.page-limit}")
     private Integer pagesLimit;
 
     private final SocialnaParser socialnaParser;

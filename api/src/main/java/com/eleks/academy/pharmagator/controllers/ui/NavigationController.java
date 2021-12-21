@@ -47,7 +47,7 @@ public class NavigationController {
     public String getMedicines(@RequestParam(required = false, defaultValue = "1") Integer page,
                                @RequestParam(required = false, defaultValue = "ASC") String sortDirection,
                                Model model) {
-        PageRequest pageRequest = PageRequest.of(page, 2 * itemsPerPage, Sort.Direction.valueOf(sortDirection), sortByMedicineField);
+        PageRequest pageRequest = PageRequest.of(page, itemsPerPage, Sort.Direction.valueOf(sortDirection), sortByMedicineField);
         Page<Medicine> pageOfMedicine = medicineService.findAllPaginated(pageRequest);
         PageWrapper<Medicine> wrappedPage = new PageWrapper<>(pageOfMedicine, "/ui/medicine", sortDirection);
 
@@ -60,13 +60,13 @@ public class NavigationController {
     public String getPrices(@RequestParam(required = false, defaultValue = "1") Integer page,
                             @RequestParam(required = false, defaultValue = "ASC") String sortDirection,
                             Model model) {
-        PageRequest pageRequest = PageRequest.of(page, 2 * itemsPerPage, Sort.Direction.valueOf(sortDirection), sortByMedicineField);
+        PageRequest pageRequest = PageRequest.of(page, itemsPerPage, Sort.Direction.valueOf(sortDirection), sortByMedicineField);
         Map<String, Map<Long, BigDecimal>> mappedPrices = exportService.getMapPricesFromDatabase(pageRequest);
 
         Long totalCountOfPrices = exportService.getRowsCountOfPrices();
         long totalPages;
 
-        totalPages = totalCountOfPrices / (2L * itemsPerPage);
+        totalPages = totalCountOfPrices / (itemsPerPage);
 
         List<PageWrapper.PageItem> pageItems = new ArrayList<>();
         int start;

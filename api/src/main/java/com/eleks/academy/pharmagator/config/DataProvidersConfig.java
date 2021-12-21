@@ -46,6 +46,7 @@ public class DataProvidersConfig {
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT_LANGUAGE, "en-US,en;q=0.9,ua;q=0.8")
                 .baseUrl(pharmacyAlteiaBaseUrl)
                 .build();
     }
